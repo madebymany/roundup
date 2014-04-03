@@ -1,8 +1,5 @@
-!roundup
 !index.html
 *.html
 *.[1-9]
 config.*
-roundup
-.roundup.*
 pages/
