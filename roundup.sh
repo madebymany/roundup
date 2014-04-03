@@ -218,13 +218,26 @@ do
         before() { :; }
         after() { :; }
         add_fixture() {
-          if [ -z "$FIXTURE_PATH"]; then FIXTURE_PATH=tests/fixtures; fi
-          if [ -z "$(echo $PATH | grep "tests/cmds")" ]; then PATH=$PWD/cmds:$PATH; fi
-          mkdir -p $PWD/cmds
-          if [ ! -f $PWD/cmds/$1 ]; then ln -s $PWD/$FIXTURE_PATH/$2 $PWD/cmds/$1; fi
+          CMD_PATH=/tmp/cmds
+          if [ -z "$FIXTURE_PATH"]
+          then
+              FIXTURE_PATH=tests/fixtures
+          fi
+          if [ -z "$(echo $PATH | grep "${CMD_PATH}")" ]
+          then
+              PATH="${CMD_PATH}:$PATH"
+          fi
+          mkdir -p "${CMD_PATH}"
+          if [ ! -f "${CMD_PATH}/$1" ]
+          then
+              ln -s $PWD/$FIXTURE_PATH/$2 ${CMD_PATH}/$1
+          fi
         }
         cleanup() {
-          if [ -d $PWD/cmds ]; then rm -rf $PWD/cmds; fi
+          if [ -d "${CMD_PATH}" ]
+          then
+              rm -rf "${CMD_PATH}"
+          fi
         }
 
         # Seek test methods and aggregate their names, forming a test plan.
