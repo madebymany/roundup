@@ -33,6 +33,11 @@ rup() { /bin/sh $0 $1-test.sh ; }
 # `describe` the plan meaningfully.
 describe "roundup(1) testing roundup(5)"
 
+it_can_add_fixture(){
+    add_fixture mytest command
+    test "$(mytest | grep "test")"
+}
+
 it_displays_the_title() {
     first_line=$(rup roundup-5 | head -n 1)
     test "$first_line" "=" "roundup(5)"

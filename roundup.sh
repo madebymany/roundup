@@ -217,6 +217,15 @@ do
         # no-op. They may or may not be redefined by the test plan.
         before() { :; }
         after() { :; }
+        add_fixture() {
+          if [ -z "$FIXTURE_PATH"]; then FIXTURE_PATH=tests/fixtures; fi
+          if [ -z "$(echo $PATH | grep "tests/cmds")" ]; then PATH=$PWD/cmds:$PATH; fi
+          mkdir -p $PWD/cmds
+          if [ ! -f $PWD/cmds/$1 ]; then ln -s $PWD/$FIXTURE_PATH/$2 $PWD/cmds/$1; fi
+        }
+        cleanup() {
+          if [ -d $PWD/cmds ]; then rm -rf $PWD/cmds; fi
+        }
 
         # Seek test methods and aggregate their names, forming a test plan.
         # This is done before populating the sandbox with tests to avoid odd
@@ -289,6 +298,7 @@ do
 
                 # If `after` wasn't redefined, then this runs `:`.
                 after
+                cleanup
 
                 # This is the final step of a test.  Print its pass/fail signal
                 # and name.
